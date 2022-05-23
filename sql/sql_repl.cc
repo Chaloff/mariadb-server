@@ -3420,6 +3420,17 @@ int reset_slave(THD *thd, Master_info* mi)
     goto err;
   }
 
+  if (mi->using_gtid != Master_info::USE_GTID_SLAVE_POS &&
+      mi->master_supports_gtid)
+  {
+    push_warning_printf(
+        thd, Sql_condition::WARN_LEVEL_NOTE,
+        ER_RESET_SLAVE_CHANGING_USING_GTID,
+        ER_THD(thd, ER_RESET_SLAVE_CHANGING_USING_GTID),
+        mi->using_gtid_astext(mi->using_gtid),
+        mi->using_gtid_astext(Master_info::USE_GTID_SLAVE_POS));
+  }
+
   /* Clear master's log coordinates and associated information */
   mi->clear_in_memory_info(thd->lex->reset_slave_info.all);
 

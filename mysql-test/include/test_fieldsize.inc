@@ -12,6 +12,7 @@ DROP TABLE IF EXISTS t1;
 sync_slave_with_master;
 STOP SLAVE;
 RESET SLAVE;
+CHANGE MASTER TO MASTER_USE_GTID=NO;
 eval $test_table_slave;
 
 connection master;
@@ -30,6 +31,7 @@ START SLAVE;
 SELECT COUNT(*) FROM t1;
 STOP SLAVE;
 RESET SLAVE;
+CHANGE MASTER TO MASTER_USE_GTID=NO;
 
 connection master;
 RESET MASTER;

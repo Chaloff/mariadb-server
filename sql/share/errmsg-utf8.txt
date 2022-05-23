@@ -10074,3 +10074,5 @@ ER_INCONSISTENT_SLAVE_TEMP_TABLE
         eng "Replicated query '%s' table `%s.%s` can not be temporary"
 ER_VERS_HIST_PART_FAILED
         eng "Versioned table %`s.%`s: adding HISTORY partition(s) failed"
+ER_RESET_SLAVE_CHANGING_USING_GTID
+        eng "RESET SLAVE is changing the current value of Using_Gtid from '%s' to its default value of '%s'"
