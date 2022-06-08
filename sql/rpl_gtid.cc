@@ -1420,7 +1420,6 @@ rpl_slave_state::load(THD *thd, const char *state_from_master, size_t len,
   return 0;
 }
 
-
 bool
 rpl_slave_state::is_empty()
 {
