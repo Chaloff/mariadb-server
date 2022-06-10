@@ -1,5 +1,10 @@
 include/master-slave.inc
 [connection master]
+connection slave;
+include/stop_slave.inc
+change master to master_use_gtid=no;
+include/start_slave.inc
+connection master;
 call mtr.add_suppression("Timeout waiting for reply of binlog*");
 create table t1 (i int);
 set global rpl_semi_sync_master_enabled = ON;
@@ -15,6 +20,9 @@ reset master;
 connection slave;
 include/stop_slave.inc
 reset slave;
+Warnings:
+Note	4190	RESET SLAVE is changing the current value of Using_Gtid from 'No' to its default value of 'Slave_Pos'
+change master to master_use_gtid=no;
 include/start_slave.inc
 set global rpl_semi_sync_slave_enabled = OFF;
 connection master;

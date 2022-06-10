@@ -63,6 +63,9 @@
 call mtr.add_suppression("Unsafe statement written to the binary log using statement format");
 --connection slave
 call mtr.add_suppression("Unsafe statement written to the binary log using statement format");
+--source include/stop_slave.inc
+CHANGE MASTER TO MASTER_USE_GTID=NO;
+--source include/start_slave.inc
 --connection master
 
 
@@ -372,6 +375,7 @@ CHANGE MASTER TO MASTER_DELAY = 71;
 
 --source include/stop_slave.inc
 RESET SLAVE;
+CHANGE MASTER TO MASTER_USE_GTID=NO;
 --echo [on master]
 --connection master
 RESET MASTER;

@@ -11,6 +11,12 @@
 --source include/have_binlog_format_mixed.inc
 --source include/master-slave.inc
 
+--connection slave
+--source include/stop_slave.inc
+CHANGE MASTER TO MASTER_USE_GTID=NO;
+--source include/start_slave.inc
+
+--connection master
 call mtr.add_suppression('Slave can not handle replication events with the checksum that master is configured to log');
 call mtr.add_suppression('Replication event checksum verification failed');
 # due to C failure simulation
@@ -197,6 +203,7 @@ select count(*) as 'must be zero' from t2;
 connection slave;
 stop slave;
 reset slave;
+CHANGE MASTER TO MASTER_USE_GTID=NO;
 
 # randomize slave server's own checksum policy
 set @@global.binlog_checksum= IF(floor((rand()*1000)%2), "CRC32", "NONE");

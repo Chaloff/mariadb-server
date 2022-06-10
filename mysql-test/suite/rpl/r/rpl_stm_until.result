@@ -1,6 +1,11 @@
 include/master-slave.inc
 [connection master]
 include/rpl_reset.inc
+connection slave;
+include/stop_slave.inc
+CHANGE MASTER TO MASTER_USE_GTID=NO;
+include/start_slave.inc
+connection master;
 call mtr.add_suppression("Unsafe statement written to the binary log using statement format since BINLOG_FORMAT = STATEMENT");
 connection slave;
 include/stop_slave.inc
@@ -70,6 +75,9 @@ connection slave;
 include/stop_slave.inc
 drop table if exists t1;
 reset slave;
+Warnings:
+Note	4190	RESET SLAVE is changing the current value of Using_Gtid from 'No' to its default value of 'Slave_Pos'
+CHANGE MASTER TO MASTER_USE_GTID=NO;
 change master to master_host='127.0.0.1',master_port=MASTER_PORT, master_user='root';
 connection master;
 drop table if exists t1;

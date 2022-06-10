@@ -186,6 +186,7 @@ SELECT * FROM t1 ORDER BY a;
 --echo *** Test that RESET SLAVE clears the Using_Gtid flag. ***
 --source include/stop_slave.inc
 RESET SLAVE;
+CHANGE MASTER TO MASTER_USE_GTID=NO;
 --let $status_items= Using_Gtid
 --source include/show_slave_status.inc
 
@@ -286,6 +287,7 @@ eval SELECT '$value' AS Gtid_Slave_Pos;
 --source include/stop_slave.inc
 DROP TABLE t1;
 RESET SLAVE ALL;
+CHANGE MASTER TO MASTER_USE_GTID=NO;
 RESET MASTER;
 SET GLOBAL gtid_slave_pos= "";
 
