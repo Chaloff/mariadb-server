@@ -46,6 +46,8 @@ a	b
 4	2
 include/stop_slave.inc
 RESET SLAVE;
+Warnings:
+Note	4190	RESET SLAVE is changing the current value of Using_Gtid from 'Current_Pos' to its default value of 'Slave_Pos'
 INSERT INTO t1 VALUES (5, 1);
 INSERT INTO t1 VALUES (6, 1);
 include/save_master_gtid.inc

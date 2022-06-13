@@ -43,6 +43,7 @@ SELECT * FROM t1;
 stop slave;
 --source include/wait_for_slave_to_stop.inc
 reset slave;
+set @@global.gtid_slave_pos= "";
 connection master;
 reset master;
 drop table t1;
@@ -162,6 +163,7 @@ SELECT * FROM t1;
 stop slave;
 --source include/wait_for_slave_to_stop.inc
 reset slave;
+set @@global.gtid_slave_pos= "";
 connection master;
 reset master;
 drop table t1;

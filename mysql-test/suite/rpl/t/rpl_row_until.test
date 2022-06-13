@@ -39,6 +39,7 @@ sync_slave_with_master;
 --source include/stop_slave.inc
 # Reset slave.
 RESET SLAVE;
+set @@global.gtid_slave_pos= "";
 --replace_result $MASTER_MYPORT MASTER_MYPORT
 eval CHANGE MASTER TO MASTER_USER='root', MASTER_CONNECT_RETRY=1, MASTER_HOST='127.0.0.1', MASTER_PORT=$MASTER_MYPORT;
 
@@ -103,6 +104,7 @@ START SLAVE UNTIL MASTER_LOG_FILE='master-bin.000001', MASTER_LOG_POS=740;
 
 --source include/stop_slave.inc
 RESET SLAVE;
+set @@global.gtid_slave_pos= "";
 --source include/start_slave.inc
 
 ##############################################################################

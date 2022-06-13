@@ -17,9 +17,16 @@ call mtr.add_suppression("Read semi-sync reply");
 call mtr.add_suppression("Unsafe statement written to the binary log using statement format since BINLOG_FORMAT = STATEMENT.");
 call mtr.add_suppression("mysqld: Got an error reading communication packets");
 connection slave;
+# While 'Current_Pos' exists as an option for Using_Gtd, keeping these
+# events in the binlog will update gtid_binlog_pos, and the later calls to
+# set `@@global.gtid_slave_pos= ""` will provide warning messages with
+# inconsistent GTID values because the seq_nos are non-deterministic with
+# the masters events coming in concurrently
+set sql_log_bin=0;
 call mtr.add_suppression("Master server does not support semi-sync");
 call mtr.add_suppression("Semi-sync slave .* reply");
 call mtr.add_suppression("Slave SQL.*Request to stop slave SQL Thread received while applying a group that has non-transactional changes; waiting for completion of the group");
+set sql_log_bin=1;
 connection master;
 
 # wait for dying connections (if any) to disappear
@@ -37,6 +44,7 @@ let $_connections_normal_slave= query_get_value(SHOW STATUS LIKE 'Threads_connec
 connection slave;
 source include/stop_slave.inc;
 reset slave;
+set @@global.gtid_slave_pos= "";
 set global rpl_semi_sync_master_enabled= 0;
 set global rpl_semi_sync_slave_enabled= 0;
 
@@ -352,6 +360,7 @@ connection slave;
 
 source include/stop_slave.inc;
 reset slave;
+set @@global.gtid_slave_pos= "";
 
 # Kill the dump thread on master for previous slave connection and
 --source include/kill_binlog_dump_threads.inc
@@ -389,6 +398,7 @@ show status like 'Rpl_semi_sync_master_yes_tx';
 connection slave;
 source include/stop_slave.inc;
 reset slave;
+set @@global.gtid_slave_pos= "";
 connection master;
 reset master;
 

@@ -68,6 +68,7 @@ START SLAVE;
 # because it is different on Unix and Windows systems.
 --disable_warnings
 RESET SLAVE;
+set @@global.gtid_slave_pos= "";
 --enable_warnings
 DROP TABLE t1;
 --replace_result $master_exec_file MASTER_LOG_FILE $master_exec_pos MASTER_LOG_POS

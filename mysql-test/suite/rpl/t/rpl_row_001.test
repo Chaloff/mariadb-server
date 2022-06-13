@@ -15,6 +15,7 @@ RESET MASTER;
 connection slave;
 STOP SLAVE;
 RESET SLAVE;
+set @@global.gtid_slave_pos= "";
 
 connection master;
 let $1=5000;
