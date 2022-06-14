@@ -19,13 +19,8 @@
 
 -- source include/have_binlog_format_mixed_or_statement.inc
 -- source include/master-slave.inc
+--let $master_use_gtid_option= No
 -- source include/rpl_reset.inc
-
---connection slave
---source include/stop_slave.inc
-CHANGE MASTER TO MASTER_USE_GTID=NO;
---source include/start_slave.inc
---connection master
 
 # Test is dependent on binlog positions
 call mtr.add_suppression("Unsafe statement written to the binary log using statement format since BINLOG_FORMAT = STATEMENT");
@@ -133,8 +128,7 @@ source include/stop_slave.inc;
 --disable_warnings
 drop table if exists t1;
 --enable_warnings
-reset slave;
-CHANGE MASTER TO MASTER_USE_GTID=NO;
+--source include/reset_slave.inc
 --replace_result $MASTER_MYPORT MASTER_PORT
 eval change master to master_host='127.0.0.1',master_port=$MASTER_MYPORT, master_user='root'; 
 

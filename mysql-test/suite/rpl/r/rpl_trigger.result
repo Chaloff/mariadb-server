@@ -965,10 +965,9 @@ include/rpl_stop_server.inc [server_number=1]
 include/rpl_start_server.inc [server_number=1]
 --> Master binlog: Server ver: 5.0.16-debug-log, Binlog ver: 4
 connection slave;
-RESET SLAVE;
+include/reset_slave.inc
 Warnings:
 Note	4190	RESET SLAVE is changing the current value of Using_Gtid from 'No' to its default value of 'Slave_Pos'
-CHANGE MASTER TO MASTER_USE_GTID=NO;
 START SLAVE;
 SELECT MASTER_POS_WAIT('master-bin.000001', 513) >= 0;
 MASTER_POS_WAIT('master-bin.000001', 513) >= 0
@@ -999,10 +998,9 @@ DROP TRIGGER trg1;
 DROP TABLE t1;
 DROP TABLE t2;
 STOP SLAVE;
-RESET SLAVE;
+include/reset_slave.inc
 Warnings:
 Note	4190	RESET SLAVE is changing the current value of Using_Gtid from 'No' to its default value of 'Slave_Pos'
-CHANGE MASTER TO MASTER_USE_GTID=NO;
 connection master;
 SHOW TABLES LIKE 't_';
 Tables_in_test (t_)

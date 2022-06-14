@@ -149,8 +149,7 @@ a
 2
 *** Test that RESET SLAVE clears the Using_Gtid flag. ***
 include/stop_slave.inc
-RESET SLAVE;
-CHANGE MASTER TO MASTER_USE_GTID=NO;
+include/reset_slave.inc
 Using_Gtid = 'No'
 START SLAVE;
 include/wait_for_slave_sql_error.inc [errno=1050]

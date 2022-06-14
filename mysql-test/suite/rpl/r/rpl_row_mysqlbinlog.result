@@ -91,8 +91,7 @@ include/wait_for_slave_to_stop.inc
 connection master;
 reset master;
 connection slave;
-reset slave;
-set @@global.gtid_slave_pos= "";
+include/reset_slave.inc
 start slave;
 include/wait_for_slave_to_start.inc
 connection master;
@@ -222,8 +221,7 @@ include/wait_for_slave_to_stop.inc
 connection master;
 reset master;
 connection slave;
-reset slave;
-set @@global.gtid_slave_pos= "";
+include/reset_slave.inc
 start slave;
 include/wait_for_slave_to_start.inc
 connection master;
@@ -358,8 +356,7 @@ include/wait_for_slave_to_stop.inc
 connection master;
 reset master;
 connection slave;
-reset slave;
-set @@global.gtid_slave_pos= "";
+include/reset_slave.inc
 start slave;
 include/wait_for_slave_to_start.inc
 connection master;

@@ -100,8 +100,7 @@ stop slave;
 connection master;
 reset master;
 connection slave;
-reset slave;
-set @@global.gtid_slave_pos= "";
+--source include/reset_slave.inc
 start slave;
 --source include/wait_for_slave_to_start.inc
 connection master;
@@ -168,8 +167,7 @@ stop slave;
 connection master;
 reset master;
 connection slave;
-reset slave;
-set @@global.gtid_slave_pos= "";
+--source include/reset_slave.inc
 start slave;
 --source include/wait_for_slave_to_start.inc
 connection master;
@@ -232,8 +230,7 @@ stop slave;
 connection master;
 reset master;
 connection slave;
-reset slave;
-set @@global.gtid_slave_pos= "";
+--source include/reset_slave.inc
 start slave;
 --source include/wait_for_slave_to_start.inc
 connection master;

@@ -139,8 +139,8 @@ SHOW TABLES;
 --disable_connect_log
 --source include/stop_slave.inc
 --enable_connect_log
-reset slave;
-CHANGE MASTER TO MASTER_USE_GTID=NO;
+--let $master_use_gtid_option= No
+--source include/reset_slave.inc
 
 --echo ##########
 --echo # Cleanup

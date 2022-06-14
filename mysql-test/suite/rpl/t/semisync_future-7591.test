@@ -26,8 +26,8 @@ reset master;
 
 --connection slave
 --source include/stop_slave.inc
-reset slave;
-change master to master_use_gtid=no;
+--let $master_use_gtid_option= No
+--source include/reset_slave.inc
 --source include/start_slave.inc
 
 set global rpl_semi_sync_slave_enabled = OFF;

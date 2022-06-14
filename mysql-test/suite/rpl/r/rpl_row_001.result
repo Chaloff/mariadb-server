@@ -6,8 +6,7 @@ connection master;
 RESET MASTER;
 connection slave;
 STOP SLAVE;
-RESET SLAVE;
-set @@global.gtid_slave_pos= "";
+include/reset_slave.inc
 connection master;
 SELECT COUNT(*) FROM t1;
 COUNT(*)

@@ -374,8 +374,8 @@ CHANGE MASTER TO MASTER_DELAY = 71;
 --source include/rpl_assert.inc
 
 --source include/stop_slave.inc
-RESET SLAVE;
-CHANGE MASTER TO MASTER_USE_GTID=NO;
+--let $master_use_gtid_option= No
+--source include/reset_slave.inc
 --echo [on master]
 --connection master
 RESET MASTER;

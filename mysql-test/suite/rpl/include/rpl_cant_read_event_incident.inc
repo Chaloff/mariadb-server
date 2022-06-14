@@ -53,8 +53,8 @@ show binlog events;
 
 --connection slave
 call mtr.add_suppression("Slave I/O: Got fatal error 1236 from master when reading data from binary log");
-reset slave;
-CHANGE MASTER TO MASTER_USE_GTID=NO;
+--let $master_use_gtid_option= No
+--source include/reset_slave.inc
 start slave;
 
 # ER_MASTER_FATAL_ERROR_READING_BINLOG 1236

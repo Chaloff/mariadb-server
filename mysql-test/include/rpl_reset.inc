@@ -68,8 +68,7 @@ while ($_rpl_server)
   if (`SELECT SUBSTRING('$rpl_master_list', 1 + ($_rpl_server - 1) * $rpl_server_count_length, $rpl_server_count_length) != ''`)
   {
     --source include/stop_slave.inc
-    RESET SLAVE;
-    SET @@GLOBAL.gtid_slave_pos= "";
+    --source include/reset_slave.inc
   }
   --dec $_rpl_server
 }

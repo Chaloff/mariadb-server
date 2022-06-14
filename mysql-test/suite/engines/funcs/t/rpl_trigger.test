@@ -321,8 +321,8 @@ let $binlog_version= query_get_value(SHOW BINLOG EVENTS, Info, 1);
 # Make the slave to replay the new binlog.
 
 connection slave;
-RESET SLAVE;
-CHANGE MASTER TO MASTER_USE_GTID=NO;
+--let $master_use_gtid_option= No
+--source include/reset_slave.inc
 --source include/start_slave.inc
 
 SELECT MASTER_POS_WAIT('master-bin.000001', 513) >= 0;
@@ -349,8 +349,7 @@ DROP TABLE t1;
 DROP TABLE t2;
 
 --source include/stop_slave.inc
-RESET SLAVE;
-CHANGE MASTER TO MASTER_USE_GTID=NO;
+--source include/reset_slave.inc
 
 # The master should be clean.
 

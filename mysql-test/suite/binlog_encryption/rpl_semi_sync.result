@@ -17,8 +17,7 @@ connection master;
 #
 connection slave;
 include/stop_slave.inc
-reset slave;
-set @@global.gtid_slave_pos= "";
+include/reset_slave.inc
 set global rpl_semi_sync_master_enabled= 0;
 set global rpl_semi_sync_slave_enabled= 0;
 connection master;
@@ -313,8 +312,7 @@ Variable_name	Value
 Rpl_semi_sync_master_yes_tx	0
 connection slave;
 include/stop_slave.inc
-reset slave;
-set @@global.gtid_slave_pos= "";
+include/reset_slave.inc
 include/kill_binlog_dump_threads.inc
 connection slave;
 include/start_slave.inc
@@ -344,8 +342,7 @@ Rpl_semi_sync_master_yes_tx	3
 #
 connection slave;
 include/stop_slave.inc
-reset slave;
-set @@global.gtid_slave_pos= "";
+include/reset_slave.inc
 connection master;
 reset master;
 include/kill_binlog_dump_threads.inc

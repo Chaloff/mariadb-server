@@ -156,10 +156,9 @@ CHANGE MASTER TO MASTER_DELAY = 71;
 include/start_slave.inc
 # Asserted this: Delay should be 71 when we set it to 71
 include/stop_slave.inc
-RESET SLAVE;
+include/reset_slave.inc
 Warnings:
 Note	4190	RESET SLAVE is changing the current value of Using_Gtid from 'No' to its default value of 'Slave_Pos'
-CHANGE MASTER TO MASTER_USE_GTID=NO;
 [on master]
 connection master;
 RESET MASTER;

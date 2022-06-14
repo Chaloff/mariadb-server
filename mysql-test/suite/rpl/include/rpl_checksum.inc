@@ -202,8 +202,8 @@ select count(*) as 'must be zero' from t2;
 #
 connection slave;
 stop slave;
-reset slave;
-CHANGE MASTER TO MASTER_USE_GTID=NO;
+--let $master_use_gtid_option= No
+--source include/reset_slave.inc
 
 # randomize slave server's own checksum policy
 set @@global.binlog_checksum= IF(floor((rand()*1000)%2), "CRC32", "NONE");

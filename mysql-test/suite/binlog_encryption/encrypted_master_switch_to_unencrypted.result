@@ -68,10 +68,9 @@ SHOW TABLES;
 Tables_in_test
 table1_no_encryption
 include/stop_slave.inc
-reset slave;
+include/reset_slave.inc
 Warnings:
 Note	4190	RESET SLAVE is changing the current value of Using_Gtid from 'No' to its default value of 'Slave_Pos'
-CHANGE MASTER TO MASTER_USE_GTID=NO;
 ##########
 # Cleanup
 ##########

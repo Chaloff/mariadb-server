@@ -19,10 +19,9 @@ insert into t1 values (1);
 reset master;
 connection slave;
 include/stop_slave.inc
-reset slave;
+include/reset_slave.inc
 Warnings:
 Note	4190	RESET SLAVE is changing the current value of Using_Gtid from 'No' to its default value of 'Slave_Pos'
-change master to master_use_gtid=no;
 include/start_slave.inc
 set global rpl_semi_sync_slave_enabled = OFF;
 connection master;

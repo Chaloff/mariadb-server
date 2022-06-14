@@ -14,14 +14,12 @@ connection slave;
 *** Default value ***
 CHANGE MASTER TO MASTER_HOST='127.0.0.1', MASTER_PORT=MASTER_PORT, MASTER_USER='root';
 slave_net_timeout/slave_heartbeat_timeout=2.0000
-RESET SLAVE;
-set @@global.gtid_slave_pos= "";
+include/reset_slave.inc
 
 *** Reset slave affect ***
 SET @@global.slave_net_timeout=30;
 CHANGE MASTER TO MASTER_HOST='127.0.0.1', MASTER_PORT=MASTER_PORT, MASTER_USER='root', MASTER_CONNECT_RETRY=20, MASTER_HEARTBEAT_PERIOD=5;
-RESET SLAVE;
-set @@global.gtid_slave_pos= "";
+include/reset_slave.inc
 SHOW GLOBAL STATUS LIKE 'slave_heartbeat_period';
 Variable_name	Value
 Slave_heartbeat_period	15.000
@@ -33,8 +31,7 @@ SHOW GLOBAL STATUS LIKE 'slave_heartbeat_period';
 Variable_name	Value
 Slave_heartbeat_period	25.000
 SET @@global.slave_net_timeout=@restore_slave_net_timeout;
-RESET SLAVE;
-set @@global.gtid_slave_pos= "";
+include/reset_slave.inc
 
 *** Warning if updated slave_net_timeout < slave_heartbeat_timeout ***
 SET @@global.slave_net_timeout=FLOOR(SLAVE_HEARTBEAT_TIMEOUT)-1;
@@ -247,8 +244,7 @@ END|
 Warnings:
 Warning	1105	Event scheduler is switched off, use SET GLOBAL event_scheduler=ON to enable it.
 connection slave;
-RESET SLAVE;
-set @@global.gtid_slave_pos= "";
+include/reset_slave.inc
 Warnings:
 Warning	1948	Specified value for @@gtid_slave_pos contains no value for replication domain 0. This conflicts with the binary log which contains GTID 0-2-2. If MASTER_GTID_POS=CURRENT_POS is used, the binlog position will override the new value of @@gtid_slave_pos
 CHANGE MASTER TO MASTER_HOST='127.0.0.1', MASTER_PORT=MASTER_PORT, MASTER_USER='root', MASTER_CONNECT_RETRY=20, MASTER_HEARTBEAT_PERIOD=5;
@@ -266,8 +262,7 @@ connection slave;
 
 *** Flush logs on slave ***
 STOP SLAVE;
-RESET SLAVE;
-set @@global.gtid_slave_pos= "";
+include/reset_slave.inc
 set sql_log_bin= 0;
 DROP TABLE t1;
 set sql_log_bin= 1;
@@ -284,8 +279,7 @@ connection master;
 SET @@global.slave_compressed_protocol=1;
 connection slave;
 include/stop_slave.inc
-RESET SLAVE;
-set @@global.gtid_slave_pos= "";
+include/reset_slave.inc
 SET @@global.slave_compressed_protocol=1;
 CHANGE MASTER TO MASTER_HOST='127.0.0.1', MASTER_PORT=MASTER_PORT, MASTER_USER='root', MASTER_CONNECT_RETRY=20, MASTER_HEARTBEAT_PERIOD=0.1;
 include/start_slave.inc
@@ -297,8 +291,7 @@ SET @@global.slave_compressed_protocol=0;
 *** Reset master ***
 connection slave;
 STOP SLAVE;
-RESET SLAVE;
-set @@global.gtid_slave_pos= "";
+include/reset_slave.inc
 CHANGE MASTER TO MASTER_HOST='127.0.0.1', MASTER_PORT=MASTER_PORT, MASTER_USER='root', MASTER_CONNECT_RETRY=20, MASTER_HEARTBEAT_PERIOD=0.1;
 include/start_slave.inc
 connection master;
@@ -309,8 +302,7 @@ Heartbeat events are received after reset of master (1 means 'yes'): 1
 *** Reload master ***
 connection slave;
 STOP SLAVE;
-RESET SLAVE;
-set @@global.gtid_slave_pos= "";
+include/reset_slave.inc
 CHANGE MASTER TO MASTER_HOST='127.0.0.1', MASTER_PORT=MASTER_PORT, MASTER_USER='root', MASTER_CONNECT_RETRY=20, MASTER_HEARTBEAT_PERIOD=0.1;
 include/start_slave.inc
 Heartbeat event received

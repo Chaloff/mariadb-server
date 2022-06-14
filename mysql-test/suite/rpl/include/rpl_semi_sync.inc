@@ -43,8 +43,7 @@ let $_connections_normal_slave= query_get_value(SHOW STATUS LIKE 'Threads_connec
 --echo #
 connection slave;
 source include/stop_slave.inc;
-reset slave;
-set @@global.gtid_slave_pos= "";
+--source include/reset_slave.inc
 set global rpl_semi_sync_master_enabled= 0;
 set global rpl_semi_sync_slave_enabled= 0;
 
@@ -359,8 +358,7 @@ show status like 'Rpl_semi_sync_master_yes_tx';
 connection slave;
 
 source include/stop_slave.inc;
-reset slave;
-set @@global.gtid_slave_pos= "";
+--source include/reset_slave.inc
 
 # Kill the dump thread on master for previous slave connection and
 --source include/kill_binlog_dump_threads.inc
@@ -397,8 +395,7 @@ show status like 'Rpl_semi_sync_master_yes_tx';
 --echo #
 connection slave;
 source include/stop_slave.inc;
-reset slave;
-set @@global.gtid_slave_pos= "";
+--source include/reset_slave.inc
 connection master;
 reset master;
 
