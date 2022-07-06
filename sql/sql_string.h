@@ -690,7 +690,7 @@ public:
 
       Note that if arg_length == Alloced_length then we don't allocate.
       This ensures we don't do any extra allocations in protocol and String:int,
-      but the string will not be atomically null terminated if c_ptr() is not
+      but the string will not be automically null terminated if c_ptr() is not
       called.
     */
     if (arg_length <= Alloced_length && Alloced_length)
@@ -701,6 +701,9 @@ public:
   bool realloc_raw(size_t arg_length);
   bool realloc(size_t arg_length)
   {
+    // This increment is redundant because we allocate the size incremented 
+    // inside realloc_raw. Removing this +1, however, introduces a lot of test failures
+    // so we leave it for now. It does no harm to allocate one extra byte. See: MDEV-28646
     if (realloc_raw(arg_length+1))
       return TRUE;
     Ptr[arg_length]= 0; // This make other funcs shorter
