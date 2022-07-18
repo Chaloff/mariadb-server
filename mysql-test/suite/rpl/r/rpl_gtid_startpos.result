@@ -38,7 +38,7 @@ START SLAVE;
 include/wait_for_slave_io_error.inc [errno=1236]
 include/stop_slave.inc
 CHANGE MASTER TO master_host = '127.0.0.1', master_port = MASTER_PORT,
-MASTER_LOG_FILE="master-bin.000003", MASTER_LOG_POS=4;
+MASTER_LOG_FILE="master-bin.000003", MASTER_LOG_POS=4, MASTER_USE_GTID=NO;
 include/start_slave.inc
 SELECT * FROM t1 ORDER BY a;
 a
@@ -91,7 +91,7 @@ connection server_2;
 include/stop_slave.inc
 RESET SLAVE ALL;
 Warnings:
-Note	4190	RESET SLAVE is changing the current value of Using_Gtid from 'Current_Pos' to its default value of 'Slave_Pos'
+Note	4190	RESET SLAVE is implicitly changing the value of 'Using_Gtid' from 'Current_Pos' to 'Slave_Pos'
 RESET MASTER;
 connection server_1;
 RESET MASTER;
@@ -122,7 +122,7 @@ include/stop_slave.inc
 DROP TABLE t1;
 RESET SLAVE;
 Warnings:
-Note	4190	RESET SLAVE is changing the current value of Using_Gtid from 'Current_Pos' to its default value of 'Slave_Pos'
+Note	4190	RESET SLAVE is implicitly changing the value of 'Using_Gtid' from 'Current_Pos' to 'Slave_Pos'
 SET GLOBAL gtid_slave_pos="";
 Warnings:
 Warning	1948	Specified value for @@gtid_slave_pos contains no value for replication domain 0. This conflicts with the binary log which contains GTID 0-2-4. If MASTER_GTID_POS=CURRENT_POS is used, the binlog position will override the new value of @@gtid_slave_pos
@@ -243,7 +243,7 @@ include/stop_slave.inc
 DROP TABLE t1;
 RESET SLAVE ALL;
 Warnings:
-Note	4190	RESET SLAVE is changing the current value of Using_Gtid from 'Current_Pos' to its default value of 'Slave_Pos'
+Note	4190	RESET SLAVE is implicitly changing the value of 'Using_Gtid' from 'Current_Pos' to 'Slave_Pos'
 CHANGE MASTER TO MASTER_USE_GTID=NO;
 RESET MASTER;
 SET GLOBAL gtid_slave_pos= "";

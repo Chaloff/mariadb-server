@@ -15,7 +15,7 @@ connection slave;
 call mtr.add_suppression("Slave I/O: Got fatal error 1236 from master when reading data from binary log");
 include/reset_slave.inc
 Warnings:
-Note	4190	RESET SLAVE is changing the current value of Using_Gtid from 'No' to its default value of 'Slave_Pos'
+Note	4190	RESET SLAVE is implicitly changing the value of 'Using_Gtid' from 'No' to 'Slave_Pos'
 start slave;
 include/wait_for_slave_param.inc [Last_IO_Errno]
 Last_IO_Errno = '1236'
@@ -26,7 +26,7 @@ connection slave;
 stop slave;
 reset slave;
 Warnings:
-Note	4190	RESET SLAVE is changing the current value of Using_Gtid from 'No' to its default value of 'Slave_Pos'
+Note	4190	RESET SLAVE is implicitly changing the value of 'Using_Gtid' from 'No' to 'Slave_Pos'
 drop table if exists t;
 reset master;
 End of the tests

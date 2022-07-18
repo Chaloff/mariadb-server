@@ -204,7 +204,7 @@ connection server_2;
 include/stop_slave.inc
 RESET SLAVE ALL;
 Warnings:
-Note	4190	RESET SLAVE is changing the current value of Using_Gtid from 'Current_Pos' to its default value of 'Slave_Pos'
+Note	4190	RESET SLAVE is implicitly changing the value of 'Using_Gtid' from 'Current_Pos' to 'Slave_Pos'
 RESET MASTER;
 SET GLOBAL gtid_slave_pos='';
 connection server_1;

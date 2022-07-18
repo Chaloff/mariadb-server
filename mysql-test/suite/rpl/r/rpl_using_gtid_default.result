@@ -22,11 +22,11 @@ include/start_slave.inc
 include/stop_slave.inc
 RESET SLAVE;
 Warnings:
-Note	4190	RESET SLAVE is changing the current value of Using_Gtid from 'No' to its default value of 'Slave_Pos'
+Note	4190	RESET SLAVE is implicitly changing the value of 'Using_Gtid' from 'No' to 'Slave_Pos'
 # A notification that Using_Gtid was reverted should exist
 SHOW WARNINGS;
 Level	Code	Message
-Note	4190	RESET SLAVE is changing the current value of Using_Gtid from 'No' to its default value of 'Slave_Pos'
+Note	4190	RESET SLAVE is implicitly changing the value of 'Using_Gtid' from 'No' to 'Slave_Pos'
 include/start_slave.inc
 # Clear SHOW WARNINGS
 #
@@ -62,11 +62,11 @@ include/start_slave.inc
 include/stop_slave.inc
 RESET SLAVE;
 Warnings:
-Note	4190	RESET SLAVE is changing the current value of Using_Gtid from 'Current_Pos' to its default value of 'Slave_Pos'
+Note	4190	RESET SLAVE is implicitly changing the value of 'Using_Gtid' from 'Current_Pos' to 'Slave_Pos'
 # A notification that Using_Gtid was reverted should exist
 SHOW WARNINGS;
 Level	Code	Message
-Note	4190	RESET SLAVE is changing the current value of Using_Gtid from 'Current_Pos' to its default value of 'Slave_Pos'
+Note	4190	RESET SLAVE is implicitly changing the value of 'Using_Gtid' from 'Current_Pos' to 'Slave_Pos'
 include/start_slave.inc
 # Clear SHOW WARNINGS
 # The MTR include file rpl_change_topology.inc should implicitly set
@@ -84,6 +84,58 @@ include/rpl_change_topology.inc [new topology=1->2]
 connection slave;
 # Validating Using_Gtid=Slave_Pos..
 # ..success
+include/start_slave.inc
+#
+# The MTR include file reset_slave.inc should keep/delete GTID state
+# when reset_slave_keep_gtid_state is set, respectively.
+#
+connection master;
+CREATE TABLE t1 (a INT);
+INSERT INTO t1 VALUES (1);
+DROP TABLE t1;
+include/save_master_gtid.inc
+connection slave;
+include/sync_with_master_gtid.inc
+include/stop_slave.inc
+# Tagging gtid_slave_pos before reset_slave.inc as old_slave_pos
+# Using reset_slave_keep_gtid_state=1 should preserve GTID state
+include/reset_slave.inc
+# Tagging gtid_slave_pos after reset_slave.inc as new_slave_pos
+# Validating old_slave_pos == new_slave_pos..
+# ..success
+# Using reset_slave_keep_gtid_state=0 should empty GTID state
+include/reset_slave.inc
+# Tagging gtid_slave_pos as new_slave_pos
+# Validating new_slave_pos is empty..
+# ..success
+set global gtid_slave_pos="old_slave_pos";
+include/start_slave.inc
+#
+# A replica issued CHANGE MASTER TO specified with log coordinates but
+# not master_use_gtid=no should warn the user that Using_Gtid is being
+# changed to No.
+#
+connection slave;
+include/stop_slave.inc
+CHANGE MASTER TO master_log_pos=io_log_pos, master_log_file='io_log_file';
+Warnings:
+Note	4190	CHANGE MASTER TO is implicitly changing the value of 'Using_Gtid' from 'Slave_Pos' to 'No'
+include/start_slave.inc
+#
+# A replica issued CHANGE MASTER TO specified with log coordinates and
+# master_use_gtid=Slave_Pos should warn the user that the log
+# coordinates will be ignored.
+#
+connection slave;
+include/stop_slave.inc
+CHANGE MASTER TO master_log_pos=io_log_pos, master_log_file='io_log_file', master_use_gtid=Slave_Pos;
+Warnings:
+Note	1618	<MASTER_LOG_FILE> option ignored
+Note	1618	<MASTER_LOG_POS> option ignored
+CHANGE MASTER TO relay_log_pos=relay_log_pos, relay_log_file='relay_log_file', master_use_gtid=Slave_Pos;
+Warnings:
+Note	1618	<RELAY_LOG_FILE> option ignored
+Note	1618	<RELAY_LOG_POS> option ignored
 include/start_slave.inc
 include/rpl_end.inc
 #

@@ -321,7 +321,7 @@ Last_SQL_Errno = '0'
 #
 RESET SLAVE for channel 'master1';
 Warnings:
-Note	4190	RESET SLAVE is changing the current value of Using_Gtid from 'No' to its default value of 'Slave_Pos'
+Note	4190	RESET SLAVE is implicitly changing the value of 'Using_Gtid' from 'No' to 'Slave_Pos'
 
 show slave status for channel 'master1'
 Master_Port = 'MYPORT_1'

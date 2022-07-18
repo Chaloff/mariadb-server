@@ -15,5 +15,5 @@ Last_SQL_Error = Relay log read failure: Could not parse relay log event entry. 
 ==== Clean up ====
 include/cleanup_fake_relay_log.inc
 Warnings:
-Note	4190	RESET SLAVE is changing the current value of Using_Gtid from 'No' to its default value of 'Slave_Pos'
+Note	4190	RESET SLAVE is implicitly changing the value of 'Using_Gtid' from 'No' to 'Slave_Pos'
 include/rpl_end.inc

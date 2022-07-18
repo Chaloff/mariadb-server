@@ -27,7 +27,7 @@ COUNT(*)
 STOP SLAVE;
 include/reset_slave.inc
 Warnings:
-Note	4190	RESET SLAVE is changing the current value of Using_Gtid from 'No' to its default value of 'Slave_Pos'
+Note	4190	RESET SLAVE is implicitly changing the value of 'Using_Gtid' from 'No' to 'Slave_Pos'
 connection master;
 RESET MASTER;
 connection slave;
@@ -38,7 +38,7 @@ connection slave;
 STOP SLAVE;
 include/reset_slave.inc
 Warnings:
-Note	4190	RESET SLAVE is changing the current value of Using_Gtid from 'No' to its default value of 'Slave_Pos'
+Note	4190	RESET SLAVE is implicitly changing the value of 'Using_Gtid' from 'No' to 'Slave_Pos'
 CREATE TABLE t1 (a DECIMAL(27, 9));
 connection master;
 CREATE TABLE t1 (a DECIMAL(27, 18));
@@ -54,7 +54,7 @@ COUNT(*)
 STOP SLAVE;
 include/reset_slave.inc
 Warnings:
-Note	4190	RESET SLAVE is changing the current value of Using_Gtid from 'No' to its default value of 'Slave_Pos'
+Note	4190	RESET SLAVE is implicitly changing the value of 'Using_Gtid' from 'No' to 'Slave_Pos'
 connection master;
 RESET MASTER;
 connection slave;
@@ -65,7 +65,7 @@ connection slave;
 STOP SLAVE;
 include/reset_slave.inc
 Warnings:
-Note	4190	RESET SLAVE is changing the current value of Using_Gtid from 'No' to its default value of 'Slave_Pos'
+Note	4190	RESET SLAVE is implicitly changing the value of 'Using_Gtid' from 'No' to 'Slave_Pos'
 CREATE TABLE t1 (a NUMERIC(5,2));
 connection master;
 CREATE TABLE t1 (a NUMERIC(20, 10));
@@ -81,7 +81,7 @@ COUNT(*)
 STOP SLAVE;
 include/reset_slave.inc
 Warnings:
-Note	4190	RESET SLAVE is changing the current value of Using_Gtid from 'No' to its default value of 'Slave_Pos'
+Note	4190	RESET SLAVE is implicitly changing the value of 'Using_Gtid' from 'No' to 'Slave_Pos'
 connection master;
 RESET MASTER;
 connection slave;
@@ -93,7 +93,7 @@ connection slave;
 STOP SLAVE;
 include/reset_slave.inc
 Warnings:
-Note	4190	RESET SLAVE is changing the current value of Using_Gtid from 'No' to its default value of 'Slave_Pos'
+Note	4190	RESET SLAVE is implicitly changing the value of 'Using_Gtid' from 'No' to 'Slave_Pos'
 CREATE TABLE t1 (a FLOAT(20));
 connection master;
 CREATE TABLE t1 (a FLOAT(47));
@@ -109,7 +109,7 @@ COUNT(*)
 STOP SLAVE;
 include/reset_slave.inc
 Warnings:
-Note	4190	RESET SLAVE is changing the current value of Using_Gtid from 'No' to its default value of 'Slave_Pos'
+Note	4190	RESET SLAVE is implicitly changing the value of 'Using_Gtid' from 'No' to 'Slave_Pos'
 connection master;
 RESET MASTER;
 connection slave;
@@ -121,7 +121,7 @@ connection slave;
 STOP SLAVE;
 include/reset_slave.inc
 Warnings:
-Note	4190	RESET SLAVE is changing the current value of Using_Gtid from 'No' to its default value of 'Slave_Pos'
+Note	4190	RESET SLAVE is implicitly changing the value of 'Using_Gtid' from 'No' to 'Slave_Pos'
 CREATE TABLE t1 (a BIT(5));
 connection master;
 CREATE TABLE t1 (a BIT(64));
@@ -137,7 +137,7 @@ COUNT(*)
 STOP SLAVE;
 include/reset_slave.inc
 Warnings:
-Note	4190	RESET SLAVE is changing the current value of Using_Gtid from 'No' to its default value of 'Slave_Pos'
+Note	4190	RESET SLAVE is implicitly changing the value of 'Using_Gtid' from 'No' to 'Slave_Pos'
 connection master;
 RESET MASTER;
 connection slave;
@@ -148,7 +148,7 @@ connection slave;
 STOP SLAVE;
 include/reset_slave.inc
 Warnings:
-Note	4190	RESET SLAVE is changing the current value of Using_Gtid from 'No' to its default value of 'Slave_Pos'
+Note	4190	RESET SLAVE is implicitly changing the value of 'Using_Gtid' from 'No' to 'Slave_Pos'
 CREATE TABLE t1 (a BIT(11));
 connection master;
 CREATE TABLE t1 (a BIT(12));
@@ -164,7 +164,7 @@ COUNT(*)
 STOP SLAVE;
 include/reset_slave.inc
 Warnings:
-Note	4190	RESET SLAVE is changing the current value of Using_Gtid from 'No' to its default value of 'Slave_Pos'
+Note	4190	RESET SLAVE is implicitly changing the value of 'Using_Gtid' from 'No' to 'Slave_Pos'
 connection master;
 RESET MASTER;
 connection slave;
@@ -176,7 +176,7 @@ connection slave;
 STOP SLAVE;
 include/reset_slave.inc
 Warnings:
-Note	4190	RESET SLAVE is changing the current value of Using_Gtid from 'No' to its default value of 'Slave_Pos'
+Note	4190	RESET SLAVE is implicitly changing the value of 'Using_Gtid' from 'No' to 'Slave_Pos'
 CREATE TABLE t1 (a SET('4'));
 connection master;
 CREATE TABLE t1 (a SET('1','2','3','4','5','6','7','8','9'));
@@ -192,7 +192,7 @@ COUNT(*)
 STOP SLAVE;
 include/reset_slave.inc
 Warnings:
-Note	4190	RESET SLAVE is changing the current value of Using_Gtid from 'No' to its default value of 'Slave_Pos'
+Note	4190	RESET SLAVE is implicitly changing the value of 'Using_Gtid' from 'No' to 'Slave_Pos'
 connection master;
 RESET MASTER;
 connection slave;
@@ -204,7 +204,7 @@ connection slave;
 STOP SLAVE;
 include/reset_slave.inc
 Warnings:
-Note	4190	RESET SLAVE is changing the current value of Using_Gtid from 'No' to its default value of 'Slave_Pos'
+Note	4190	RESET SLAVE is implicitly changing the value of 'Using_Gtid' from 'No' to 'Slave_Pos'
 CREATE TABLE t1 (a CHAR(10));
 connection master;
 CREATE TABLE t1 (a CHAR(20));
@@ -220,7 +220,7 @@ COUNT(*)
 STOP SLAVE;
 include/reset_slave.inc
 Warnings:
-Note	4190	RESET SLAVE is changing the current value of Using_Gtid from 'No' to its default value of 'Slave_Pos'
+Note	4190	RESET SLAVE is implicitly changing the value of 'Using_Gtid' from 'No' to 'Slave_Pos'
 connection master;
 RESET MASTER;
 connection slave;
@@ -232,7 +232,7 @@ connection slave;
 STOP SLAVE;
 include/reset_slave.inc
 Warnings:
-Note	4190	RESET SLAVE is changing the current value of Using_Gtid from 'No' to its default value of 'Slave_Pos'
+Note	4190	RESET SLAVE is implicitly changing the value of 'Using_Gtid' from 'No' to 'Slave_Pos'
 CREATE TABLE t1 (a ENUM('44','54'));
 connection master;
 CREATE TABLE t1 (a ENUM(
@@ -279,7 +279,7 @@ COUNT(*)
 STOP SLAVE;
 include/reset_slave.inc
 Warnings:
-Note	4190	RESET SLAVE is changing the current value of Using_Gtid from 'No' to its default value of 'Slave_Pos'
+Note	4190	RESET SLAVE is implicitly changing the value of 'Using_Gtid' from 'No' to 'Slave_Pos'
 connection master;
 RESET MASTER;
 connection slave;
@@ -291,7 +291,7 @@ connection slave;
 STOP SLAVE;
 include/reset_slave.inc
 Warnings:
-Note	4190	RESET SLAVE is changing the current value of Using_Gtid from 'No' to its default value of 'Slave_Pos'
+Note	4190	RESET SLAVE is implicitly changing the value of 'Using_Gtid' from 'No' to 'Slave_Pos'
 CREATE TABLE t1 (a VARCHAR(100));
 connection master;
 CREATE TABLE t1 (a VARCHAR(2000));
@@ -307,7 +307,7 @@ COUNT(*)
 STOP SLAVE;
 include/reset_slave.inc
 Warnings:
-Note	4190	RESET SLAVE is changing the current value of Using_Gtid from 'No' to its default value of 'Slave_Pos'
+Note	4190	RESET SLAVE is implicitly changing the value of 'Using_Gtid' from 'No' to 'Slave_Pos'
 connection master;
 RESET MASTER;
 connection slave;
@@ -318,7 +318,7 @@ connection slave;
 STOP SLAVE;
 include/reset_slave.inc
 Warnings:
-Note	4190	RESET SLAVE is changing the current value of Using_Gtid from 'No' to its default value of 'Slave_Pos'
+Note	4190	RESET SLAVE is implicitly changing the value of 'Using_Gtid' from 'No' to 'Slave_Pos'
 CREATE TABLE t1 (a VARCHAR(10));
 connection master;
 CREATE TABLE t1 (a VARCHAR(200));
@@ -334,7 +334,7 @@ COUNT(*)
 STOP SLAVE;
 include/reset_slave.inc
 Warnings:
-Note	4190	RESET SLAVE is changing the current value of Using_Gtid from 'No' to its default value of 'Slave_Pos'
+Note	4190	RESET SLAVE is implicitly changing the value of 'Using_Gtid' from 'No' to 'Slave_Pos'
 connection master;
 RESET MASTER;
 connection slave;
@@ -345,7 +345,7 @@ connection slave;
 STOP SLAVE;
 include/reset_slave.inc
 Warnings:
-Note	4190	RESET SLAVE is changing the current value of Using_Gtid from 'No' to its default value of 'Slave_Pos'
+Note	4190	RESET SLAVE is implicitly changing the value of 'Using_Gtid' from 'No' to 'Slave_Pos'
 CREATE TABLE t1 (a VARCHAR(1000));
 connection master;
 CREATE TABLE t1 (a VARCHAR(2000));
@@ -361,7 +361,7 @@ COUNT(*)
 STOP SLAVE;
 include/reset_slave.inc
 Warnings:
-Note	4190	RESET SLAVE is changing the current value of Using_Gtid from 'No' to its default value of 'Slave_Pos'
+Note	4190	RESET SLAVE is implicitly changing the value of 'Using_Gtid' from 'No' to 'Slave_Pos'
 connection master;
 RESET MASTER;
 connection slave;
@@ -373,7 +373,7 @@ connection slave;
 STOP SLAVE;
 include/reset_slave.inc
 Warnings:
-Note	4190	RESET SLAVE is changing the current value of Using_Gtid from 'No' to its default value of 'Slave_Pos'
+Note	4190	RESET SLAVE is implicitly changing the value of 'Using_Gtid' from 'No' to 'Slave_Pos'
 CREATE TABLE t1 (a TINYBLOB);
 connection master;
 CREATE TABLE t1 (a LONGBLOB);
@@ -389,7 +389,7 @@ COUNT(*)
 STOP SLAVE;
 include/reset_slave.inc
 Warnings:
-Note	4190	RESET SLAVE is changing the current value of Using_Gtid from 'No' to its default value of 'Slave_Pos'
+Note	4190	RESET SLAVE is implicitly changing the value of 'Using_Gtid' from 'No' to 'Slave_Pos'
 connection master;
 RESET MASTER;
 connection slave;

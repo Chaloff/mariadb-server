@@ -1,11 +1,5 @@
 --source include/master-slave.inc
 
---connection slave
---source include/stop_slave.inc
-change master to master_use_gtid=no;
---source include/start_slave.inc
---connection master
-
 call mtr.add_suppression("Timeout waiting for reply of binlog*");
 create table t1 (i int);
 
@@ -14,7 +8,7 @@ set global rpl_semi_sync_master_enabled = ON;
 --connection slave
 --source include/stop_slave.inc
 set global rpl_semi_sync_slave_enabled = ON;
-change master to master_log_file='master-bin.000002', master_log_pos = 320;
+change master to master_log_file='master-bin.000002', master_log_pos = 320, master_use_gtid=no;
 
 start slave;
 --let $slave_io_errno=1236
