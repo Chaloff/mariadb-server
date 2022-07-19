@@ -1602,6 +1602,12 @@ Query_log_event::Query_log_event(const uchar *buf, uint event_len,
       pos+= host.length;
       break;
     }
+    case Q_LTM:
+    {
+      CHECK_SPACE(pos, end, 1);
+      master_ltm= *pos++;
+      break;
+    }
     case Q_HRNOW:
     {
       CHECK_SPACE(pos, end, 3);

@@ -3555,6 +3555,8 @@ public:
   bool       slave_thread;
   bool	     no_errors;
 
+  enum_locked_tables_mode master_locked_tables_mode;
+
   /**
     Set to TRUE if execution of the current compound statement
     can not continue. In particular, disables activation of
