@@ -19995,7 +19995,7 @@ ha_innobase::multi_range_read_explain_info(
 @return table handle
 @retval NULL if the table is dropped, unaccessible or corrupted
 for purge thread */
-static TABLE* innodb_find_table_for_vc(THD* thd, dict_table_t* table)
+TABLE* innodb_find_table_for_vc(THD* thd, dict_table_t* table)
 {
 	TABLE *mysql_table;
 	const bool  bg_thread = THDVAR(thd, background_thread);
@@ -20005,7 +20005,7 @@ static TABLE* innodb_find_table_for_vc(THD* thd, dict_table_t* table)
 			return mysql_table;
 		}
 	} else {
-		if (table->vc_templ->mysql_table_query_id
+		if (table->vc_templ && table->vc_templ->mysql_table_query_id
 		    == thd_get_query_id(thd)) {
 			return table->vc_templ->mysql_table;
 		}
@@ -20026,8 +20026,10 @@ static TABLE* innodb_find_table_for_vc(THD* thd, dict_table_t* table)
 
 	mysql_table = find_fk_open_table(thd, db_buf, db_buf_len,
 					 tbl_buf, tbl_buf_len);
-	table->vc_templ->mysql_table = mysql_table;
-	table->vc_templ->mysql_table_query_id = thd_get_query_id(thd);
+	if (table->vc_templ) {
+		table->vc_templ->mysql_table = mysql_table;
+		table->vc_templ->mysql_table_query_id = thd_get_query_id(thd);
+        }
 	return mysql_table;
 }
 
@@ -21197,4 +21199,11 @@ buf_pool_size_align(
   } else {
     return (size / m + 1) * m;
   }
+}
+
+row_prebuilt_t *innobase_get_prebuilt(TABLE *maria_table)
+{
+  ha_innobase *ib_handler= (ha_innobase*)maria_table->file;
+  ib_handler->build_template(true);
+  return ib_handler->get_prebuilt();
 }

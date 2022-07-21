@@ -8167,3 +8167,28 @@ THD::charset_collation_context_alter_table(const TABLE_SHARE *s)
   return Charset_collation_context(get_default_db_collation(this, s->db.str),
                                    s->table_charset);
 }
+
+uchar **sql_get_maria_table_record(TABLE *table)
+{
+  return table->record;
+}
+
+uint sql_log_cascade_update(TABLE *table)
+{
+  Log_func *log_func= Update_rows_log_event::binlog_row_logging_function;
+  bitmap_set_all(&table->def_read_set);
+  return binlog_log_row_online_alter(table, table->record[0], table->record[1],
+                                     log_func);
+}
+
+uint sql_log_cascade_delete(TABLE *table)
+{
+  Log_func *log_func= Delete_rows_log_event::binlog_row_logging_function;
+  bitmap_set_all(&table->def_read_set);
+  return binlog_log_row_online_alter(table, table->record[0], NULL, log_func);
+}
+
+bool sql_is_online_alter_table(const TABLE *table)
+{
+  return table->s->online_alter_binlog;
+}

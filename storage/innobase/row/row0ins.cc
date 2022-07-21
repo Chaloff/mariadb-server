@@ -43,12 +43,15 @@ Created 4/20/1996 Heikki Tuuri
 #include "buf0lru.h"
 #include "fts0fts.h"
 #include "fts0types.h"
+#include "ha_innodb.h"
 #ifdef BTR_CUR_HASH_ADAPT
 # include "btr0sea.h"
 #endif
 #ifdef WITH_WSREP
 #include "wsrep_mysqld.h"
 #endif /* WITH_WSREP */
+
+#include "scope.h"
 
 /*************************************************************************
 IMPORTANT NOTE: Any operation that generates redo MUST check that there
@@ -978,6 +981,83 @@ dberr_t wsrep_append_foreign_key(trx_t *trx,
 			       Wsrep_service_key_type	key_type);
 #endif /* WITH_WSREP */
 
+
+uchar **sql_get_maria_table_record(TABLE *table);
+uint sql_log_cascade_update(TABLE *table);
+uint sql_log_cascade_delete(TABLE *table);
+bool sql_is_online_alter_table(const TABLE *table);
+
+static bool report_row_update(upd_node_t *cascade, dict_index_t* clust_index)
+{
+  dict_table_t *table= clust_index->table;
+  TABLE *maria_table= innodb_find_table_for_vc(current_thd, table);
+  uchar **maria_record= sql_get_maria_table_record(maria_table);
+  row_prebuilt_t *prebuilt= innobase_get_prebuilt(maria_table);
+
+  prebuilt->index= clust_index;
+
+  auto _= make_scope_exit([cascade](){
+    cascade->row = NULL;
+    cascade->ext = NULL;
+    cascade->upd_row = NULL;
+    cascade->upd_ext = NULL;
+    mem_heap_empty(cascade->heap);
+  });
+
+  dtuple_t *entry = row_build_index_entry(cascade->row, cascade->ext,
+                                          clust_index, cascade->heap);
+  const ulint n_ext= dtuple_get_n_ext(entry);
+  dtuple_t *upd_entry;
+
+  ulint rec_size= rec_get_converted_size(clust_index, entry, n_ext);
+  if (!cascade->is_delete)
+  {
+    upd_entry= row_build_index_entry(cascade->upd_row, cascade->upd_ext,
+                                     clust_index, cascade->heap);
+    ulint rec_size_upd= rec_get_converted_size(clust_index, upd_entry, n_ext);
+    if (rec_size_upd > rec_size)
+      rec_size = rec_size_upd;
+  }
+
+  byte *rec_buf= static_cast<byte*>(mem_heap_alloc(cascade->heap, rec_size));
+
+  rec_t *rec= rec_convert_dtuple_to_rec(rec_buf, clust_index, entry, n_ext);
+  rec_offs *offsets= rec_get_offsets(rec, clust_index, NULL,
+                                     clust_index->n_fields,
+                                     ULINT_UNDEFINED, &cascade->heap);
+
+  bool res= row_sel_store_mysql_rec(maria_record[0], prebuilt, rec, NULL, true,
+                                    clust_index, offsets);
+  if (UNIV_UNLIKELY(!res))
+    return false;
+
+  if (cascade->is_delete)
+  {
+    sql_log_cascade_delete(maria_table);
+  }
+  else
+  {
+    // row_sel_store_mysql_rec frees blob heap each call.
+    mem_heap_t *blob_heap= prebuilt->blob_heap;
+    prebuilt->blob_heap= NULL;
+
+    rec= rec_convert_dtuple_to_rec(rec_buf, clust_index, upd_entry, n_ext);
+    offsets= rec_get_offsets(rec, clust_index, offsets,
+                             clust_index->n_fields,
+                             ULINT_UNDEFINED, &cascade->heap);
+    res= row_sel_store_mysql_rec(maria_record[1], prebuilt, rec, NULL, true,
+                                 clust_index, offsets);
+
+    if (UNIV_LIKELY(res))
+      sql_log_cascade_update(maria_table);
+
+    if (blob_heap)
+      mem_heap_free(blob_heap);
+  }
+
+  return true;
+}
+
 /*********************************************************************//**
 Perform referential actions or checks when a parent row is deleted or updated
 and the constraint had an ON DELETE or ON UPDATE condition which was not
@@ -1017,6 +1097,8 @@ row_ins_foreign_check_on_constraint(
 	DBUG_ENTER("row_ins_foreign_check_on_constraint");
 
 	trx = thr_get_trx(thr);
+
+	TABLE *maria_table= innodb_find_table_for_vc(current_thd, table);
 
 	/* Since we are going to delete or update a row, we have to invalidate
 	the MySQL query cache for table. A deadlock of threads is not possible
@@ -1346,8 +1428,13 @@ row_ins_foreign_check_on_constraint(
 
 	cascade->state = UPD_NODE_UPDATE_CLUSTERED;
 
+	cascade->sql_is_online_alter = sql_is_online_alter_table(maria_table);
+
 	err = row_update_cascade_for_mysql(thr, cascade,
 					   foreign->foreign_table);
+
+	if (!report_row_update(cascade, clust_index))
+		err = DB_CORRUPTION;
 
 	mtr_start(mtr);
 

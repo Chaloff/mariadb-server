@@ -2831,7 +2831,7 @@ row_upd(
 
 	/* Do some cleanup */
 
-	if (node->row != NULL) {
+	if (node->row != NULL && !node->sql_is_online_alter) {
 		node->row = NULL;
 		node->ext = NULL;
 		node->upd_row = NULL;

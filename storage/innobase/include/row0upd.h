@@ -443,6 +443,9 @@ struct upd_node_t{
 	bool		in_mysql_interface;
 				/* whether the update node was created
 				for the MySQL interface */
+        bool		sql_is_online_alter;
+        			/* whether the ONLINE ALTER TABLE is in
+                                progress */
 	dict_foreign_t*	foreign;/* NULL or pointer to a foreign key
 				constraint if this update node is used in
 				doing an ON DELETE or ON UPDATE operation */

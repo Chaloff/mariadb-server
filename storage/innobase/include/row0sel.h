@@ -477,6 +477,17 @@ row_sel_field_store_in_mysql_format_func(
         const byte*     data,   /*!< in: data to store */
         ulint           len);    /*!< in: length of the data */
 
+MY_ATTRIBUTE((warn_unused_result))
+bool
+row_sel_store_mysql_rec(
+        byte*		    mysql_rec,
+        row_prebuilt_t*	    prebuilt,
+        const rec_t*	    rec,
+        const dtuple_t*	    vrow,
+        bool		    rec_clust,
+        const dict_index_t* index,
+        const rec_offs*     offsets);
+
 #include "row0sel.inl"
 
 #endif
