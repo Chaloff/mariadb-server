@@ -2177,9 +2177,19 @@ static int binlog_commit(handlerton *hton, THD *thd, bool all)
   */
   if (likely(!error) && ending_trans(thd, all))
   {
-    error= is_preparing_xa(thd) ?
+    bool is_xa_prepare= is_preparing_xa(thd);
+
+    error= is_xa_prepare ?
       binlog_commit_flush_xa_prepare(thd, all, cache_mngr) :
       binlog_commit_flush_trx_cache (thd, all, cache_mngr);
+    // the user xa is unlogged on common exec path with the "empty" xa case
+    if (cache_mngr->need_unlog && !is_xa_prepare)
+    {
+      error=
+        mysql_bin_log.unlog(BINLOG_COOKIE_MAKE(cache_mngr->binlog_id,
+                                               cache_mngr->delayed_error), 1);
+      cache_mngr->need_unlog= false;
+    }
   }
   /*
     This is part of the stmt rollback.
