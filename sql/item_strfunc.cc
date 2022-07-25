@@ -1460,8 +1460,8 @@ bool Item_func_random_bytes::fix_length_and_dec(THD *thd)
   used_tables_cache|= RAND_TABLE_BIT;
   if (args[0]->can_eval_in_optimize())
   {
-    int32 v= (int32) args[0]->val_int();
-    max_length= MY_MAX(0, MY_MIN(v, MAX_RANDOM_BYTES));
+    arg_val_int= (int32) args[0]->val_int();
+    max_length= MY_MAX(arg_val_int, MY_MIN(arg_val_int, MAX_RANDOM_BYTES));
     return false;
   }
   max_length= MAX_RANDOM_BYTES;
@@ -1478,11 +1478,16 @@ void Item_func_random_bytes::update_used_tables()
 
 String *Item_func_random_bytes::val_str(String *str)
 {
-  longlong count= args[0]->val_int();
+  longlong count;
 
   if (args[0]->null_value)
     goto err;
   null_value= 0;
+
+  if (args[0]->can_eval_in_optimize())
+    count= arg_val_int;
+  else
+    count= args[0]->val_int();
 
   if (count < 1 || count > MAX_RANDOM_BYTES)
   {

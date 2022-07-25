@@ -387,6 +387,7 @@ public:
 
 class Item_func_random_bytes : public Item_str_func
 {
+  int32 arg_val_int;
 public:
   Item_func_random_bytes(THD *thd, Item *arg1) : Item_str_func(thd, arg1) {}
   bool fix_length_and_dec(THD *thd) override;
