@@ -7631,16 +7631,16 @@ MYSQL_BIN_LOG::write_transaction_to_binlog(THD *thd,
   entry.using_trx_cache= using_trx_cache;
   entry.need_unlog= is_preparing_xa(thd);
   ha_info= all ? thd->transaction->all.ha_list : thd->transaction->stmt.ha_list;
+  entry.end_event= end_ev;
+  auto has_xid= entry.end_event->get_type_code() == XID_EVENT;
 
-  for (; !entry.need_unlog && ha_info; ha_info= ha_info->next())
+  for (; has_xid && !entry.need_unlog && ha_info; ha_info= ha_info->next())
   {
     if (ha_info->is_started() && ha_info->ht() != binlog_hton &&
         !ha_info->ht()->commit_checkpoint_request)
       entry.need_unlog= true;
-    break;
   }
 
-  entry.end_event= end_ev;
   if (cache_mngr->stmt_cache.has_incident() ||
       cache_mngr->trx_cache.has_incident())
   {
