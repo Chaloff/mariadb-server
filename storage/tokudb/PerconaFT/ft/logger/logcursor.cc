@@ -162,14 +162,16 @@ static int lc_create(TOKULOGCURSOR *lc, const char *log_dir) {
     cursor->buffer = toku_malloc(cursor->buffer_size); // it does not matter if it failes
     // cursor->logdir must be an absolute path
     if (toku_os_is_absolute_name(log_dir)) {
-        cursor->logdir = (char *) toku_xmalloc(strlen(log_dir)+1);
-        sprintf(cursor->logdir, "%s", log_dir);
+		size_t logdir_str_size = strlen(log_dir)+1;
+        cursor->logdir = (char *) toku_xmalloc(logdir_str_size);
+        snprintf(cursor->logdir, logdir_str_size, "%s", log_dir);
     } else {
         char cwdbuf[PATH_MAX];
         char *cwd = getcwd(cwdbuf, PATH_MAX);
         assert(cwd);
-        cursor->logdir = (char *) toku_xmalloc(strlen(cwd)+strlen(log_dir)+2);
-        sprintf(cursor->logdir, "%s/%s", cwd, log_dir);
+		size_t logdir_str_size = strlen(cwd)+strlen(log_dir)+2;
+        cursor->logdir = (char *) toku_xmalloc(logdir_str_size);
+        snprintf(cursor->logdir, logdir_str_size, "%s/%s", cwd, log_dir);
     }
     cursor->logfiles = NULL;
     cursor->n_logfiles = 0;
@@ -206,7 +208,7 @@ int toku_logcursor_create_for_file(TOKULOGCURSOR *lc, const char *log_dir, const
     TOKULOGCURSOR cursor = *lc;
     int fullnamelen = strlen(cursor->logdir) + strlen(log_file) + 3;
     char *XMALLOC_N(fullnamelen, log_file_fullname);
-    sprintf(log_file_fullname, "%s/%s", cursor->logdir, log_file);
+    snprintf(log_file_fullname, fullnamelen, "%s/%s", cursor->logdir, log_file);
 
     cursor->n_logfiles=1;
 

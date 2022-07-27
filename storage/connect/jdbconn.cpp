@@ -451,8 +451,9 @@ PQRYRES JDBCSrcCols(PGLOBAL g, PCSZ src, PJPARM sjp)
 
 	if (strstr(src, "%s")) {
 		// Place holder for an eventual where clause
-		sqry = (char*)PlugSubAlloc(g, NULL, strlen(src) + 2);
-		sprintf(sqry, src, "1=1");			 // dummy where clause
+		size_t sqry_size = strlen(src) + 2;
+		sqry = (char*)PlugSubAlloc(g, NULL, sqry_size);
+		snprintf(sqry, ((sqry_size + 7) / 8) * 8, src, "1=1");			 // dummy where clause
 	} else
 		sqry = (char*)src;
 
